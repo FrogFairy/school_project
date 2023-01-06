@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+<div class="main">
+    <div class="box-2">
+        <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
+                title="Районы" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить">
+            {% for district in districts %}
+                <option value="{{ district.district }}">{{ district.district }}</option>
+            {% endfor %}
+        </select>
+        <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
+                title="Вузы-партнеры" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить"
+                style="text-transform: none;">
+            {% for university in universities %}
+                <option value="{{ university.title }}">{{ university.title }}</option>
+            {% endfor %}
+        </select>
+        <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
+                title="Проекты" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить">
+            {% for p in predprof %}
+                <option value="{{ p.title }}">{{ p.title }}</option>
+            {% endfor %}
+        </select>
+        <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
+                title="Секции" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить">
+            {% for category in categories %}
+                <option value="{{ category.category }}">{{ category.category }}</option>
+            {% endfor %}
+        </select>
+        <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
+                title="Доступность" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить">
+            <option value="k">Инвалиды-колясочники</option>
+            <option value="o">Инвалиды-опорники</option>
+            <option value="z">Инвалиды по зрению</option>
+            <option value="s">Инвалиды по слуху</option>
+        </select>
+        <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
+                title="Формы обучения" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить">
+            {% for form in forms %}
+                <option value="{{ form }}">{{ form }}</option>
+            {% endfor %}
+        </select>
+        <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
+                title="Рейтинг" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить">
+            <option value="1">Район 1</option>
+            <option value="2">Район 2</option>
+            <option value="3">Район 3</option>
+        </select>
+    </div>
+    <div class="box-2">
+        <div class="input-group">
+            <div class="form-outline">
+                <input type="search" id="form1" class="form-control" />
+                <label class="form-label" for="form1">Поиск</label>
+            </div>
+            <button type="button" class="btn btn-primary">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

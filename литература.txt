@@ -1,0 +1,9 @@
+https://python-scripts.com/flask-or-django#forms
+https://pythonist.ru/django-vs-flask-chto-vybrat-dlya-svoego-proekta/
+https://ru.stackoverflow.com/questions/749943/Как-парсить-html-страничку-с-javascript-в-python-3
+https://habr.com/ru/post/248559/
+https://www.awesomeandrew.ru/2019/07/23/начинаем-работать-с-selenium-в-python/#i-3
+https://stackoverflow.com/questions/7867537/how-to-select-a-drop-down-menu-value-with-selenium-using-python
+https://habr.com/ru/post/250975/
+https://www.awesomeandrew.ru/2021/08/06/руководство-по-поиску-элементов-с-исп/#i-4
+Django 2 в примерах - Антонио Меле
