@@ -1,7 +1,3 @@
-requests
-json
+django
 selenium
 sqlite3
-
-
-5%{W8E*g0|m9Tnf

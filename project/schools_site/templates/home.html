@@ -43,9 +43,11 @@
         </select>
         <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
                 title="Рейтинг" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить">
-            <option value="1">Район 1</option>
-            <option value="2">Район 2</option>
-            <option value="3">Район 3</option>
+            <option value="1">Рейтинг 1</option>
+            <option value="2">Рейтинг 2</option>
+            <option value="3">Рейтинг 3</option>
+            <option value="4">Рейтинг 4</option>
+            <option value="5">Рейтинг 5</option>
         </select>
     </div>
     <div class="box-2">
@@ -58,6 +60,14 @@
                 <i class="fas fa-search"></i>
             </button>
         </div>
+    </div>
+    <div class="box-4">
+        {% for school in schools %}
+            <div class="box-5">
+                <a href="{{ school.get_absolute_url }}" class="school_button"> {{ school.full_name }} </a>
+            </div>
+        {% endfor %}
+        {% include "pagination.html" with page=schools %}
     </div>
 </div>
 {% endblock %}
