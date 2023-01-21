@@ -77,6 +77,32 @@ class Schools(models.Model):
     def get_absolute_url(self):
         return reverse('schools_site:school_page', args=[self.web_site.split(".")[0]])
 
+    def get_sections(self):
+        if self.sections_id:
+            sections_id = list(map(int, self.sections_id.split(", ")))
+            return Sections.objects.filter(id__in=range(sections_id[0], sections_id[1] + 1))
+        return []
+
+    def get_predprof(self):
+        if self.predprof_id:
+            return Predprof.objects.filter(id__in=list(map(int, self.predprof_id.split(", "))))
+        return []
+
+    def get_universities(self):
+        if self.universities_id:
+            universities_id = list(map(int, self.universities_id.split(", ")))
+            return Universities.objects.filter(id__in=range(universities_id[0], universities_id[1] + 1))
+        return []
+
+    def get_forms(self):
+        if self.educational_services and self.educational_services != "-":
+            return list(map(lambda x: "".join(list(map(lambda y: y.capitalize(), x.split()))),
+                            self.educational_services.split(", ")))
+        return []
+
+    def get_addresses(self):
+        return Addresses.objects.filter(id__in=list(map(int, self.institutions_addresses.split(", "))))
+
     class Meta:
         managed = True
         db_table = 'schools'
@@ -90,7 +116,7 @@ class Sections(models.Model):
     form = models.TextField(blank=True, null=True)
 
     objects = models.Manager()
-    schools_list = SchoolManager()
+    sections_list = SectionManager()
 
     class Meta:
         managed = True

@@ -1,10 +1,11 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    {% load static %}
+    {% load tags_extra %}
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href='{% static "style.css" %}'>
+    <link rel="stylesheet" href='{% static "css/style.css" %}'>
     <link rel= "stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
     <link rel= "stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
@@ -13,22 +14,12 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.js"></script>
-    <div class="navigation">
-        <div class="box-3">
-            <a href="/schools_site">
-                <div class="button">
-                    <span>Главная</span>
-                </div>
-            </a>
-        </div>
-        <div class="box-1">
-            <div class="button button-login">
-                <span>Авторизация</span>
+    <div class="box-3">
+        <a href="/schools_site">
+            <div class="button">
+                Главная
             </div>
-            <div class="button button-reg">
-                <span>Регистрация</span>
-            </div>
-        </div>
+        </a>
     </div>
 </head>
 <body>

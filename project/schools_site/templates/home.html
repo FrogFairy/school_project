@@ -1,73 +1,124 @@
 {% extends "base.html" %}
 {% block title %}Главная{% endblock %}
 {% block content %}
-<div class="main">
-    <div class="box-2">
-        <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
-                title="Районы" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить">
-            {% for district in districts %}
-                <option value="{{ district.district }}">{{ district.district }}</option>
-            {% endfor %}
-        </select>
-        <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
-                title="Вузы-партнеры" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить"
-                style="text-transform: none;">
-            {% for university in universities %}
-                <option value="{{ university.title }}">{{ university.title }}</option>
-            {% endfor %}
-        </select>
-        <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
-                title="Проекты" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить">
-            {% for p in predprof %}
-                <option value="{{ p.title }}">{{ p.title }}</option>
-            {% endfor %}
-        </select>
-        <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
-                title="Секции" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить">
-            {% for category in categories %}
-                <option value="{{ category.category }}">{{ category.category }}</option>
-            {% endfor %}
-        </select>
-        <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
-                title="Доступность" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить">
-            <option value="k">Инвалиды-колясочники</option>
-            <option value="o">Инвалиды-опорники</option>
-            <option value="z">Инвалиды по зрению</option>
-            <option value="s">Инвалиды по слуху</option>
-        </select>
-        <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
-                title="Формы обучения" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить">
-            {% for form in forms %}
-                <option value="{{ form }}">{{ form }}</option>
-            {% endfor %}
-        </select>
-        <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
-                title="Рейтинг" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить">
-            <option value="1">Рейтинг 1</option>
-            <option value="2">Рейтинг 2</option>
-            <option value="3">Рейтинг 3</option>
-            <option value="4">Рейтинг 4</option>
-            <option value="5">Рейтинг 5</option>
-        </select>
-    </div>
-    <div class="box-2">
-        <div class="input-group">
-            <div class="form-outline">
-                <input type="search" id="form1" class="form-control" />
-                <label class="form-label" for="form1">Поиск</label>
-            </div>
-            <button type="button" class="btn btn-primary">
-                <i class="fas fa-search"></i>
-            </button>
-        </div>
-    </div>
-    <div class="box-4">
-        {% for school in schools %}
-            <div class="box-5">
-                <a href="{{ school.get_absolute_url }}" class="school_button"> {{ school.full_name }} </a>
-            </div>
+<div class="box-2">
+    <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
+            title="Районы" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить"
+            id="district">
+        {% for district in districts %}
+            <option value="{{ district.district }}">{{ district.district }}</option>
         {% endfor %}
-        {% include "pagination.html" with page=schools %}
+    </select>
+    <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
+            title="Округи" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить"
+            id="adm_area">
+        {% for adm_area in adm_area %}
+            <option value="{{ adm_area.adm_area }}">{{ adm_area.adm_area }}</option>
+        {% endfor %}
+    </select>
+    <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
+            title="Вузы-партнеры" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить"
+            id="university">
+        {% for university in universities %}
+            <option value="{{ university.title }}">{{ university.title }}</option>
+        {% endfor %}
+    </select>
+    <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
+            title="Проекты" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить"
+            id="predprof">
+        {% for p in predprof %}
+            <option value="{{ p.title }}">{{ p.title }}</option>
+        {% endfor %}
+    </select>
+    <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
+            title="Секции" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить"
+            id="category">
+        {% for category in categories %}
+            <option value="{{ category.category }}">{{ category.category }}</option>
+        {% endfor %}
+    </select>
+    <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
+            title="Доступность" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить"
+            id="disabled">
+        <option value="k">Инвалиды-колясочники</option>
+        <option value="o">Инвалиды-опорники</option>
+        <option value="z">Инвалиды по зрению</option>
+        <option value="s">Инвалиды по слуху</option>
+    </select>
+    <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
+            title="Формы обучения" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить"
+            id="forms">
+        {% for form in forms %}
+            <option value="{{ form }}">{{ form }}</option>
+        {% endfor %}
+    </select>
+    <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
+            title="Рейтинг" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить"
+            id="rating">
+        <option value="1">Рейтинг 1</option>
+        <option value="2">Рейтинг 2</option>
+        <option value="3">Рейтинг 3</option>
+        <option value="4">Рейтинг 4</option>
+        <option value="5">Рейтинг 5</option>
+    </select>
+</div>
+<div class="box-2">
+    <div class="input-group">
+        <div class="form-outline">
+            <input type="search" id="form1" class="form-control" />
+            <label class="form-label" for="form1">Поиск</label>
+        </div>
+        <button type="button" class="btn btn-primary">
+            <i class="fas fa-search"></i>
+        </button>
     </div>
 </div>
+<div class="box-4">
+    {% for school in schools %}
+        <div class="box-5">
+            <a href="{{ school.get_absolute_url }}" class="school_button" target="new"><span></span> {{ school.full_name }} </a>
+        </div>
+    {% endfor %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if schools.has_previous %}
+                <a href="?page={{ schools.previous_page_number }}"><span aria-hidden="true">&laquo;</span></a>
+            {% endif %}
+            <span class="current">
+                Страница {{ schools.number }} из {{ schools.paginator.num_pages }}
+            </span>
+            {% if schools.has_next %}
+                <a href="?page={{ schools.next_page_number }}"><span aria-hidden="true">&raquo;</span></a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+<script>
+    $('select').on('change', send);
+
+    $('.pagination a').on('click', send);
+
+    function send() {
+        $.ajax({
+            type: 'POST',
+            data: {
+                district: $('#district').val(),
+                adm_area: $('#adm_area').val(),
+                university: $('#university').val(),
+                predprof: $('#predprof').val(),
+                category: $('#category').val(),
+                disabled: $('#disabled').val(),
+                forms: $('#forms').val(),
+                rating: $('#rating').val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function(data) {
+              console.log(data);
+            },
+            error:  function(data){
+              console.log('Внимание! произошла ошибка:' + data);
+            }
+        });
+    };
+</script>
 {% endblock %}

@@ -1,7 +1,104 @@
 {% extends "base.html" %}
 {% block title %}{{ school.short_name }}{% endblock %}
 {% block content %}
-<div class="main">
-
+<div class="box-2">
+    <h2>{{ school.full_name }}</h2>
 </div>
+<div class="box-2">
+    <h3>Email: {{ school.email }}</h3>
+    <h3>Номер телефона: +7 {{ school.public_phone }}</h3>
+    <h3>Сайт: <a href="https://{{ school.web_site }}" target="new">{{ school.web_site }}</a></h3>
+</div>
+<div class="box-2">
+    {% for tag in forms %}
+        <div class="tag">#{{ tag }}</div>
+    {% endfor %}
+</div>
+<div class="box-2">
+    <div class="tag">#{{ school.legal_organization|title }}</div>
+</div>
+<div class="box-2">
+    <h3>Предпрофессиональные классы</h3>
+</div>
+<div class="box-2">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Название</th>
+                <th scope="col">Описание</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in predprof %}
+                <tr>
+                    <td>{{ i.title }}</td>
+                    <td>{{ i.description }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="box-2">
+    <h3>Сотрудничество с вузами</h3>
+</div>
+<div class="box-2">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Название</th>
+                <th scope="col">Количество поступивших</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in universities %}
+                <tr>
+                    <td>{{ i.title }}</td>
+                    <td>{{ i.count }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="box-2">
+    <h3>Дополнительное образование</h3>
+</div>
+{% for category in categories %}
+    {% if sections|in_category:category.category %}
+        <div class="box-2">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col" colspan="4" style="text-align: center;">
+                            {{ category.category }}</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">Название</th>
+                        <th scope="col">Возрастная категория</th>
+                        <th scope="col">Бесплатное ли обучение</th>
+                        <th scope="col">Форма занятий</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in sections|in_category:category.category %}
+                        <tr>
+                            <td>{{ i.title }}</td>
+                            <td>{{ i.age_category }}</td>
+                            {% if i.free %}
+                                <td>Да</td>
+                            {% else %}
+                                <td>Нет</td>
+                            {% endif %}
+                            <td>{{ i.form }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endfor %}
+<script>
+    $('thead.thead-dark').click(function(){
+        $(this).nextUntil('thead.thead-dark').slideToggle(100);
+    });
+</script>
 {% endblock %}
