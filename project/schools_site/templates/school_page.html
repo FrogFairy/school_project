@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% block title %}{{ school.short_name }}{% endblock %}
 {% block content %}
+{% load static %}
 <div class="box-2">
-    <h2>{{ school.full_name }}</h2>
+    <h2 class="school_name">{{ school.full_name }}</h2>
+</div>
+<div class="box-2">
+    <h2 class="rating">Рейтинг: {{ mean_rating }}</h2>
 </div>
 <div class="box-2">
     <h3>Email: {{ school.email }}</h3>
@@ -18,7 +22,17 @@
     <div class="tag">#{{ school.legal_organization|title }}</div>
 </div>
 <div class="box-2">
-    <h3>Предпрофессиональные классы</h3>
+    <div id="map" style="width: 700px; height: 600px;"></div>
+</div>
+<div class="box-2">
+    <h3>Навигация:</h3>
+    <h5><a href="#predprof">Предпрофессиональные классы</a></h5>
+    <h5><a href="#universities">Сотрудничество с вузами</a></h5>
+    <h5><a href="#sections">Допольнительное образование</a></h5>
+    <h5><a href="#reviews">Отзывы</a></h5>
+</div>
+<div class="box-2">
+    <h3 id="predprof">Предпрофессиональные классы</h3>
 </div>
 <div class="box-2">
     <table class="table">
@@ -39,7 +53,7 @@
     </table>
 </div>
 <div class="box-2">
-    <h3>Сотрудничество с вузами</h3>
+    <h3 id="universities">Сотрудничество с вузами</h3>
 </div>
 <div class="box-2">
     <table class="table">
@@ -60,10 +74,10 @@
     </table>
 </div>
 <div class="box-2">
-    <h3>Дополнительное образование</h3>
+    <h3 id="sections">Дополнительное образование</h3>
 </div>
 {% for category in categories %}
-    {% if sections|in_category:category.category %}
+    {% if sections and sections|in_category:category.category %}
         <div class="box-2">
             <table class="table">
                 <thead class="thead-dark">
@@ -96,9 +110,136 @@
         </div>
     {% endif %}
 {% endfor %}
+
+<div class="box-2">
+    <h3 id="reviews">Отзывы</h3>
+</div>
+{% if user.is_authenticated and user|check_unique:school %}
+    <div class="box-2">
+        <a class="button button-reg" href="add_review">
+            <span>Добавить</span>
+        </a>
+    </div>
+{% endif %}
+{% for review in reviews %}
+    <div class="box-6">
+        <h5>{{ user.username }}. {{ profiles|get_info:review.user_id }}</h5>
+        {% if review.rating == 5 %}
+            <img src="{% static 'img/five.png' %}" width="200" height="42">
+        {% elif review.rating == 4 %}
+            <img src="{% static 'img/four.png' %}" width="200" height="42">
+        {% elif review.rating == 3 %}
+            <img src="{% static 'img/three.png' %}" width="200" height="42">
+        {% elif review.rating == 2 %}
+            <img src="{% static 'img/two.png' %}" width="200" height="42">
+        {% else %}
+            <img src="{% static 'img/one.png' %}" width="200" height="42">
+        {% endif %}
+        <br><br>
+        <h4>{{ review.text }}</h4>
+    </div>
+{% endfor %}
+
 <script>
     $('thead.thead-dark').click(function(){
         $(this).nextUntil('thead.thead-dark').slideToggle(100);
     });
+
+    $(document).data('length', {{ addresses.count }});
+    $(document).data('school_name', '{{ school.short_name }}');
+    {% for i in addresses %}
+        $(document).data('address {{ forloop.counter }}', '{{ i.address }}');
+        $(document).data('adm_area {{ forloop.counter }}', '{{ i.adm_area }}');
+        $(document).data('district {{ forloop.counter }}', '{{ i.district }}');
+        $(document).data('public_phone {{ forloop.counter }}', '{{ i.public_phone }}');
+        $(document).data('available_k {{ forloop.counter }}', '{{ i.available_k }}');
+        $(document).data('available_o {{ forloop.counter }}', '{{ i.available_o }}');
+        $(document).data('available_z {{ forloop.counter }}', '{{ i.available_z }}');
+        $(document).data('available_s {{ forloop.counter }}', '{{ i.available_s }}');
+    {% endfor %}
+    $(document).ready(function() {
+        ymaps.ready(init);
+    });
+
+    function init() {
+        // создание карты
+        var myMap = new ymaps.Map("map", {
+            center: [55.76, 37.64],
+            zoom: 10
+        });
+
+        for (var i = 0; i < Number($(document).data('length')); ++i) {
+            var address = $(document).data('address ' + String(i + 1));
+            var adm_area = $(document).data('adm_area ' + String(i + 1));
+            var district = $(document).data('district ' + String(i + 1));
+            var public_phone = $(document).data('public_phone ' + String(i + 1));
+
+            var available_k = $(document).data('available_k ' + String(i + 1));
+            if (available_k == 'полностью') {
+                var available_k = "{% static "img/k-full.png" %}";
+            } else if (available_k == 'частично') {
+                var available_k = "{% static "img/k-party.png" %}";
+            } else {
+                var available_k = "{% static "img/k-not.png" %}";
+            }
+
+            var available_o = $(document).data('available_o ' + String(i + 1));
+            if (available_o == 'полностью') {
+                var available_o = "{% static "img/o-full.png" %}";
+            } else if (available_o == 'частично') {
+                var available_o = "{% static "img/o-party.png" %}";
+            } else {
+                var available_o = "{% static "img/o-not.png" %}";
+            }
+
+            var available_z = $(document).data('available_z ' + String(i + 1));
+            if (available_z == 'полностью') {
+                var available_z = "{% static "img/z-full.png" %}";
+            } else if (available_z == 'частично') {
+                var available_z = "{% static "img/z-party.png" %}";
+            } else {
+                var available_z = "{% static "img/z-not.png" %}";
+            }
+
+            var available_s = $(document).data('available_s ' + String(i + 1));
+            if (available_s == 'полностью') {
+                var available_s = "{% static "img/s-full.png" %}";
+            } else if (available_s == 'частично') {
+                var available_s = "{% static "img/s-party.png" %}";
+            } else {
+                var available_s = "{% static "img/s-not.png" %}";
+            }
+
+            // поиск координат по адресу
+            var geocoder = ymaps.geocode(address);
+
+            // когда поиск вернул результат
+            geocoder.then(
+                function (res) {
+                    // координаты объекта
+                    var coordinates = res.geoObjects.get(0).geometry.getCoordinates();
+                    myMap.setCenter(coordinates, 12, {checkZoomRange: true});
+                    // Добавление метки (Placemark) на карту
+                    var placemark = new ymaps.Placemark(
+                        coordinates, {
+                            'hintContent': address,
+                            'balloonContentHeader': '<p>' + $(document).data('school_name') + '</p>',
+                            'balloonContentBody': '<img src="' + available_k + '" height="50" width="50">' +
+                                                '<img src="' + available_o + '" height="50" width="50">' +
+                                                '<img src="' + available_z + '" height="50" width="50">' +
+                                                '<img src="' + available_s + '" height="50" width="50"> <br/>' +
+                                                "<p>Адрес: " + address + "</p><br/><p>Округ: " + adm_area + "</p><br/><p>Район: " + district + "</p><br/><p>Номер телефона: " +
+                                                public_phone + "</p>"
+
+                        }, {
+                            'preset': 'islands#redDotIcon'
+                        }
+                    );
+
+                    myMap.geoObjects.add(placemark);
+                }
+            );
+        }
+    }
 </script>
 {% endblock %}

@@ -77,31 +77,44 @@ class Schools(models.Model):
     def get_absolute_url(self):
         return reverse('schools_site:school_page', args=[self.web_site.split(".")[0]])
 
-    def get_sections(self):
+    def get_sections(self, category=[]):
+        """Секции школы"""
         if self.sections_id:
             sections_id = list(map(int, self.sections_id.split(", ")))
+            if category:
+                return Sections.objects.filter(id__in=range(sections_id[0], sections_id[1] + 1), category__in=category)
             return Sections.objects.filter(id__in=range(sections_id[0], sections_id[1] + 1))
         return []
 
     def get_predprof(self):
+        """Предпрофессиональные классы школы"""
         if self.predprof_id:
-            return Predprof.objects.filter(id__in=list(map(int, self.predprof_id.split(", "))))
+            if type(self.predprof_id) == int:
+                return Predprof.objects.filter(id=self.predprof_id)
+            predprof_id = list(map(int, self.predprof_id.split(", ")))
+            return Predprof.objects.filter(id__in=predprof_id)
         return []
 
     def get_universities(self):
+        """Вузы-партнеры школы"""
         if self.universities_id:
             universities_id = list(map(int, self.universities_id.split(", ")))
             return Universities.objects.filter(id__in=range(universities_id[0], universities_id[1] + 1))
         return []
 
     def get_forms(self):
+        """Формы обучения школы"""
         if self.educational_services and self.educational_services != "-":
             return list(map(lambda x: "".join(list(map(lambda y: y.capitalize(), x.split()))),
                             self.educational_services.split(", ")))
         return []
 
     def get_addresses(self):
-        return Addresses.objects.filter(id__in=list(map(int, self.institutions_addresses.split(", "))))
+        """Адреса школы"""
+        if type(self.institutions_addresses) == int:
+            return Addresses.objects.filter(id=self.institutions_addresses)
+        institutions_addresses = list(map(int, self.institutions_addresses.split(", ")))
+        return Addresses.objects.filter(id__in=institutions_addresses)
 
     class Meta:
         managed = True

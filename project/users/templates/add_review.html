@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} Добавление отзыва {% endblock %}
+{% block content %}
+    <div class="box-4" style="padding: 10px;">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Добавление отзыва</legend>
+                <div id="div_rating" class="mb-3">
+                    <label for="rating-select" class="form-label requiredField">
+                        Оценка
+                        <span class="asteriskField">*</span>
+                    </label> <br/>
+                    <select class="form-select form-select-lg mb-3" name="rating" id="rating-select">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <div id="div_text" class="mb-3">
+                    <label for="text" class="form-label requiredField">
+                        Отзыв
+                        <span class="asteriskField">*</span>
+                    </label>
+                    <textarea name="text" autofocus="" autocapitalize="none" autocomplete=""
+                           maxlength="1000" class="textinput form-control" required="" id="text">
+                    </textarea>
+                </div>
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Добавить</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} Профиль {{ user.username }} {% endblock %}
+{% block content %}
+    <div class="box-2">
+        <div class="media">
+            <div class="media-body">
+                <h2 class="account-heading">{{ user.username }}</h2>
+                <p class="text-secondary">{{ user.email }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="box-4" style="padding: 10px;">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="box-2">
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Редактирование профиля</legend>
+                    <div id="div_role" class="mb-3">
+                        <label for="role-select" class="form-label">
+                            Роль
+                        </label> <br/>
+                        <select class="form-select form-select-lg mb-3" name="role" id="role-select">
+                            {% if role == 'parent' %}
+                                <option value="parent" selected>Родитель</option>
+                            {% else %}
+                                <option value="parent">Родитель</option>
+                            {% endif %}
+                            {% if role == "teacher" %}
+                                <option value="teacher" selected>Преподаватель</option>
+                            {% else %}
+                                <option value="teacher">Преподаватель</option>
+                            {% endif %}
+                            {% if role == "student" %}
+                                <option value="student" selected>Ученик</option>
+                            {% else %}
+                                <option value="student">Ученик</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div id="div_school" class="mb-3">
+                        <label id="for_school" for="school-select" class="form-label">
+                            {% if role == "parent" %}
+                                Школа, в которой учится Ваш ребенок
+                            {% elif role == "teacher" %}
+                                Школа, в которой Вы работаете
+                            {% else %}
+                                Школа, в которой Вы учитесь
+                            {% endif %}
+                        </label> <br/>
+                        <select class="form-control deptId selectpicker" name="school" id="school-select"
+                                data-live-search="true" data-actions-box="true" data-size="5">
+                            {% for school in schools %}
+                                {% if school_id == school.id %}
+                                    <option value="{{ school.id }}" selected>{{ school.short_name }}</option>
+                                {% else %}
+                                    <option value="{{ school.id }}">{{ school.short_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="box-2">
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit">Сохранить</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        $('#role-select').on('change', change_text);
+
+        function change_text() {
+            var text = $("#role-select").val();
+            if (text == "parent") {
+                $('#for_school').text("Школа, в которой учится Ваш ребенок");
+            } else if (text == "teacher") {
+                $('#for_school').text("Школа, в которой Вы работаете");
+            } else {
+                $('#for_school').text("Школа, в которой Вы учитесь");
+            }
+        }
+    </script>
+{% endblock content %}

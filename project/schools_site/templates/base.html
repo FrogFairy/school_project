@@ -14,15 +14,36 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.js"></script>
-    <div class="box-3">
-        <a href="/schools_site">
-            <div class="button">
-                Главная
-            </div>
-        </a>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=76d3a208-8282-4af2-b4f1-f749cdb7c2ad&lang=ru_RU" type="text/javascript"></script>
+    <div class="navigation">
+        <div class="box-3">
+            <a href="/">
+                <div class="button">
+                    Главная
+                </div>
+            </a>
+        </div>
+        <div class="box-1">
+            {% if user.is_authenticated %}
+                <a style="padding-right: 20px; padding-left: 20px; margin-top: 10px; font-size: 1.5em; color: #000000"
+                   href="/profile">{{ user.username }}</a>
+                <a class="button button-login" href="/logout">
+                    <span>Выход</span>
+                </a>
+            {% else %}
+                <a class="button button-login" href="/login">
+                    <span>Авторизация</span>
+                </a>
+                <a class="button button-reg" href="/register">
+                    <span>Регистрация</span>
+                </a>
+            {% endif %}
+        </div>
     </div>
 </head>
 <body>
-    {% block content %}{% endblock %}
+    <div class="box-4">
+        {% block content %}{% endblock %}
+    </div>
 </body>
 </html>

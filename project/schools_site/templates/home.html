@@ -52,28 +52,25 @@
             <option value="{{ form }}">{{ form }}</option>
         {% endfor %}
     </select>
-    <select class="form-control deptId selectpicker" multiple data-live-search="true" data-actions-box="true"
-            title="Рейтинг" data-size="8" data-select-all-text="Все" data-deselect-all-text="Очистить"
-            id="rating">
-        <option value="1">Рейтинг 1</option>
-        <option value="2">Рейтинг 2</option>
-        <option value="3">Рейтинг 3</option>
-        <option value="4">Рейтинг 4</option>
-        <option value="5">Рейтинг 5</option>
+    <select class="form-control deptId selectpicker" data-live-search="true" data-actions-box="true"
+            title="Рейтинг" data-size="8" id="rating">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
     </select>
 </div>
-<div class="box-2">
-    <div class="input-group">
-        <div class="form-outline">
-            <input type="search" id="form1" class="form-control" />
-            <label class="form-label" for="form1">Поиск</label>
-        </div>
-        <button type="button" class="btn btn-primary">
+<div class="box-2" id="search">
+    <div class="input-group rounded">
+        <input type="search" class="form-control rounded" placeholder="Поиск" aria-label="Поиск" aria-describedby="search-addon"
+               id="search_text" />
+        <button class="input-group-text border-0" id="search-addon">
             <i class="fas fa-search"></i>
         </button>
     </div>
 </div>
-<div class="box-4">
+<div class="box-4" id="schools_get">
     {% for school in schools %}
         <div class="box-5">
             <a href="{{ school.get_absolute_url }}" class="school_button" target="new"><span></span> {{ school.full_name }} </a>
@@ -81,24 +78,29 @@
     {% endfor %}
     <div class="pagination">
         <span class="step-links">
-            {% if schools.has_previous %}
-                <a href="?page={{ schools.previous_page_number }}"><span aria-hidden="true">&laquo;</span></a>
+            {% if previous_page_number %}
+                <button aria-hidden="true" id="{{ previous_page_number }}">&laquo;</button>
             {% endif %}
             <span class="current">
-                Страница {{ schools.number }} из {{ schools.paginator.num_pages }}
+                Страница {{ number }} из {{ num_pages }}
             </span>
-            {% if schools.has_next %}
-                <a href="?page={{ schools.next_page_number }}"><span aria-hidden="true">&raquo;</span></a>
+            {% if next_page_number %}
+                <button aria-hidden="true" id="{{ next_page_number }}">&raquo;</button>
             {% endif %}
         </span>
     </div>
 </div>
+<div class="box-4" id="schools_post">
+</div>
 <script>
-    $('select').on('change', send);
+    $('select').on('change', send_form);
 
-    $('.pagination a').on('click', send);
+    $('#search button').on('click', send_form);
 
-    function send() {
+    $('#schools_get button').on('click', send_paginator);
+    $("#schools_post").on("click", "button", send_paginator);
+
+    function send_form() {
         $.ajax({
             type: 'POST',
             data: {
@@ -110,15 +112,64 @@
                 disabled: $('#disabled').val(),
                 forms: $('#forms').val(),
                 rating: $('#rating').val(),
+                search_request: $('#search_text').val(),
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             },
             success: function(data) {
-              console.log(data);
-            },
-            error:  function(data){
-              console.log('Внимание! произошла ошибка:' + data);
+                load_html(data);
             }
         });
     };
+
+    function send_paginator() {
+        $.ajax({
+            type: 'POST',
+            data: {
+                district: $('#district').val(),
+                adm_area: $('#adm_area').val(),
+                university: $('#university').val(),
+                predprof: $('#predprof').val(),
+                category: $('#category').val(),
+                disabled: $('#disabled').val(),
+                forms: $('#forms').val(),
+                rating: $('#rating').val(),
+                search_request: $('#search_text').val(),
+                page_number: $(this).attr('id'),
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function(data) {
+                window.history.replaceState(null, null, $(location).attr('pathname') + '?page=' + data.number);
+                load_html(data);
+            }
+        });
+    };
+
+    function load_html(data) {
+        var schools_post = $("#schools_post")
+        schools_post.empty();
+        schools_post.show();
+        $('#schools_get').empty();
+        $('#schools_get').hide();
+        schools = data.schools;
+        absolute_urls = data.absolute_urls;
+        previous_page_number = data.previous_page_number;
+        next_page_number = data.next_page_number;
+        number = data.number;
+        num_pages = data.num_pages;
+        html = '';
+        for(var i = 0 ; i < schools.length ; i++){
+            html += '<div class="box-5"><a href="' + absolute_urls[i] + '" class="school_button" target="new"><span></span>' + schools[i].full_name + '</a></div>';
+        }
+        html += '<div class="pagination"><span class="step-links">';
+        if (previous_page_number != 0) {
+            html += '<button aria-hidden="true" id="' + previous_page_number + '">&laquo;</button>';
+        }
+        html += '<span class="current">Страница ' + number +' из ' + num_pages + '</span>';
+        if (next_page_number != 0) {
+            html += '<button aria-hidden="true" id="' + next_page_number + '">&raquo;</button>';
+        }
+        html += '</span></div>';
+        schools_post.append(html)
+    }
 </script>
 {% endblock %}

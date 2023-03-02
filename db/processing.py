@@ -382,6 +382,5 @@ for i in all:
                     ("Российский химико-технологический университет им. Д.И. Менделеева", i[0]))
         conn.commit()
         title = cur.execute("""SELECT title FROM universities WHERE id = ?""", (i[0],)).fetchone()[0]
-    print(title)
 
 conn.commit()
